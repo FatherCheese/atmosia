@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "atmosia",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This mod aims to help new BTA modders.",
+  "name": "Atmosia",
+  "description": "An ambience mod for BTA!",
   "authors": [
-    "Turnip Labs"
+    "Cookie Cakes"
   ],
   "contact": {
     "homepage": "",
@@ -19,20 +19,17 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-			"turniplabs.examplemod.ExampleMod"
-    ],
+			"cookie.atmosia.Atmosia"
+    	],
 		"beforeGameStart": [
-			"turniplabs.examplemod.ExampleMod"
+			"cookie.atmosia.Atmosia"
 		],
 		"afterGameStart": [
-			"turniplabs.examplemod.ExampleMod"
-		],
-		"recipesReady": [
-			"turniplabs.examplemod.ExampleMod"
+			"cookie.atmosia.Atmosia"
 		]
 	},
   "mixins": [
-      "examplemod.mixins.json"
+    "atmosia.mixins.json"
   ],
 
   "depends": {
