@@ -28,6 +28,10 @@ public class ASounds {
 		SoundHelper.addSound(MOD_ID, "critter7.ogg");
 		SoundHelper.addSound(MOD_ID, "critter8.ogg");
 
+		// Any Plains/Glacier
+		SoundHelper.addSound(MOD_ID, "wind_snippet4.ogg");
+		SoundHelper.addSound(MOD_ID, "wind_snippet5.ogg");
+
 		// Any High
 		SoundHelper.addSound(MOD_ID, "windgust.ogg");
 
