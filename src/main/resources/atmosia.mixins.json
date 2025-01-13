@@ -7,6 +7,7 @@
     "WorldMixin"
   ],
   "client": [
+    "WorldClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1
