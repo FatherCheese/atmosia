@@ -1,95 +1,47 @@
 package cookie.atmosia.extra.mixin;
 
 import cookie.atmosia.extra.IWorldAtmospheric;
-import net.minecraft.core.entity.Entity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.net.handler.PacketHandlerClient;
+import net.minecraft.client.world.WorldClient;
+import net.minecraft.client.world.WorldClientMP;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.sound.SoundCategory;
 import net.minecraft.core.util.helper.MathHelper;
-import net.minecraft.core.world.World;
-import net.minecraft.core.world.WorldSource;
-import net.minecraft.core.world.biome.Biome;
 import net.minecraft.core.world.biome.Biomes;
-import net.minecraft.core.world.biome.provider.BiomeProvider;
 import net.minecraft.core.world.chunk.Chunk;
 import net.minecraft.core.world.chunk.ChunkCoordinate;
-import net.minecraft.core.world.season.SeasonManager;
 import net.minecraft.core.world.season.SeasonWinter;
-import net.minecraft.core.world.type.WorldType;
 import net.minecraft.core.world.type.WorldTypes;
 import net.minecraft.core.world.type.nether.WorldTypeNether;
 import net.minecraft.core.world.type.overworld.WorldTypeOverworld;
 import net.minecraft.core.world.type.overworld.WorldTypeOverworldHell;
-import net.minecraft.core.world.weather.*;
+import net.minecraft.core.world.weather.WeatherClear;
+import net.minecraft.core.world.weather.WeatherRain;
+import net.minecraft.core.world.weather.WeatherSnow;
+import net.minecraft.core.world.weather.WeatherStorm;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
-@Mixin(value = World.class, remap = false)
-public abstract class WorldMixin implements WorldSource, IWorldAtmospheric {
+@Mixin(value = WorldClientMP.class, remap = false)
+@Environment(EnvType.CLIENT)
+public abstract class WorldClientMPMixin extends WorldClient implements IWorldAtmospheric {
 
-	@Shadow
-	public Random rand;
-
-	@Shadow
-	public abstract boolean isChunkLoaded(int x, int z);
-
-	@Shadow
-	public abstract Chunk getChunkFromChunkCoords(int x, int z);
-
-	@Shadow
-	protected int updateLCG;
-
-	@Shadow
-	public abstract Biome getBlockBiome(int x, int y, int z);
-
-	@Shadow
-	public abstract Player getClosestPlayer(double x, double y, double z, double radius);
-
-	@Shadow
-	public abstract void playSoundEffect(Entity player, SoundCategory category, double x, double y, double z, String soundPath, float volume, float pitch);
-
-	@Shadow
-	public abstract Weather getCurrentWeather();
-
-	@Shadow
-	public abstract boolean canBlockSeeTheSky(int x, int y, int z);
-
-	@Shadow
-	public abstract BiomeProvider getBiomeProvider();
-
-	@Shadow
-	public abstract int getHeightBlocks();
-
-	@Shadow
-	public abstract boolean isDaytime();
-
-	@Shadow
-	public WorldType worldType;
-
-	@Shadow
-	public BiomeProvider biomeProvider;
-
-	@Shadow
-	public SeasonManager seasonManager;
-
-	@Shadow
-	public List<Player> players;
 	@Unique
 	private int atmosia_ambientSoundCounter;
 
 	@Unique
 	private final Set<ChunkCoordinate> atmosia_positionsToUpdate = new HashSet<>();
 
-	@Inject(method = "<init>()V", at = @At("TAIL"))
-	private void atmosia_initCounter(CallbackInfo ci) {
+	@Inject(method = "<init>", at = @At("TAIL"))
+	private void atmosia_initCounter(PacketHandlerClient packetHandlerClient, long seed, int dimensionId, int worldTypeId, CallbackInfo ci) {
 		atmosia_ambientSoundCounter = rand.nextInt(150);
 	}
 
@@ -209,7 +161,7 @@ public abstract class WorldMixin implements WorldSource, IWorldAtmospheric {
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))
-	private void atmosia_worldTick(CallbackInfo ci) {
+	private void atmosia_tick(CallbackInfo ci) {
 		atmosia_playAmbientSounds();
 	}
 }

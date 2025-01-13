@@ -7,7 +7,8 @@
     "WorldMixin"
   ],
   "client": [
-    "SoundRepositoryMixin"
+    "SoundRepositoryMixin",
+    "WorldClientMPMixin"
   ],
   "injectors": {
     "defaultRequire": 1

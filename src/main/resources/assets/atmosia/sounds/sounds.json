@@ -122,7 +122,15 @@
   "ambience.height": {
     "sounds": [
       {
-        "name": "ambience/height/windgust.ogg",
+        "name": "ambience/height/wind_hit1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/height/wind_hit2.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/height/wind_hit3.ogg",
         "stream": true
       }
     ]
