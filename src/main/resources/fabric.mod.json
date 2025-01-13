@@ -21,10 +21,10 @@
     "main": [
 			"cookie.atmosia.Atmosia"
     	],
-		"beforeGameStart": [
+		"beforeClientStart": [
 			"cookie.atmosia.Atmosia"
 		],
-		"afterGameStart": [
+		"afterClientStart": [
 			"cookie.atmosia.Atmosia"
 		]
 	},
@@ -33,7 +33,7 @@
   ],
 
   "depends": {
-		"minecraft": "^7.2-beta",
+		"minecraft": "*",
     "fabricloader": ">=0.15.5"
   },
   "suggests": {

@@ -1,14 +1,14 @@
 package cookie.atmosia;
 
-import cookie.atmosia.core.ASounds;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.client.sound.SoundRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import turniplabs.halplibe.util.ClientStartEntrypoint;
 import turniplabs.halplibe.util.GameStartEntrypoint;
-import turniplabs.halplibe.util.RecipeEntrypoint;
 
 
-public class Atmosia implements ModInitializer, GameStartEntrypoint {
+public class Atmosia implements ModInitializer, ClientStartEntrypoint {
     public static final String MOD_ID = "atmosia";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     @Override
@@ -17,12 +17,12 @@ public class Atmosia implements ModInitializer, GameStartEntrypoint {
     }
 
 	@Override
-	public void beforeGameStart() {
-		ASounds.initializeSounds();
+	public void beforeClientStart() {
+
 	}
 
 	@Override
-	public void afterGameStart() {
-
+	public void afterClientStart() {
+		SoundRepository.SOUNDS.registerNamespace(MOD_ID);
 	}
 }

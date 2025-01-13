@@ -1,0 +1,246 @@
+{
+  "ambience.cave": {
+    "sounds": [
+      {
+        "name": "ambience/cave/cave_hit1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/cave/cave_hit2.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/cave/cave_hit3.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/cave/cave_hit4.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/cave/cave_hit5.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/cave/cave_hit6.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/cave/rain_drip1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/cave/rain_drip2.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/cave/rain_drip3.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/cave/rain_drip4.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/cave/rumble1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/cave/rumble2.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/cave/rumble3.ogg",
+        "stream": true
+      }
+    ]
+  },
+  "ambience.forest": {
+    "sounds": [
+      {
+        "name": "ambience/forest/chicka1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/forest/chicka2.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/forest/chicka3.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/forest/chirp1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/forest/chirp2.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/forest/chirp3.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/forest/flit1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/forest/squeek1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/forest/squeek2.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/forest/squeek3.ogg",
+        "stream": true
+      }
+    ]
+  },
+  "ambience.forest.weather": {
+    "sounds": [
+      {
+        "name": "ambience/weather/treewind1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/weather/treewind2.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/weather/treewind3.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/weather/treewind4.ogg",
+        "stream": true
+      }
+    ]
+  },
+  "ambience.height": {
+    "sounds": [
+      {
+        "name": "ambience/height/windgust.ogg",
+        "stream": true
+      }
+    ]
+  },
+  "ambience.nether": {
+    "sounds": [
+      {
+        "name": "ambience/nether/wind_moan1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/nether/wind_moan2.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/nether/wind_moan3.ogg",
+        "stream": true
+      }
+    ]
+  },
+  "ambience.night": {
+    "sounds": [
+      {
+        "name": "ambience/night/critter1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/night/critter2.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/night/critter3.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/night/critter4.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/night/critter5.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/night/critter6.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/night/critter7.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/night/critter8.ogg",
+        "stream": true
+      }
+    ]
+  },
+  "ambience.plains": {
+    "sounds": [
+      {
+        "name": "ambience/plains/wind_snippet4.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/plains/wind_snippet5.ogg",
+        "stream": true
+      }
+    ]
+  },
+  "ambience.swamp": {
+    "sounds": [
+      {
+        "name": "ambience/swamp/critter1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/swamp/critter2.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/swamp/critter3.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/swamp/critter4.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/swamp/critter5.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/swamp/critter6.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/swamp/critter7.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/swamp/critter8.ogg",
+        "stream": true
+      }
+    ]
+  },
+  "ambience.weather.storm": {
+    "sounds": [
+      {
+        "name": "ambience/weather/wind_hit1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/weather/wind_hit2.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/weather/wind_hit3.ogg",
+        "stream": true
+      }
+    ]
+  }
+}

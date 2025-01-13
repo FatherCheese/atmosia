@@ -1,7 +1,7 @@
 package cookie.atmosia.extra.mixin;
 
 import net.minecraft.core.entity.Entity;
-import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.sound.SoundCategory;
 import net.minecraft.core.world.World;
 import net.minecraft.core.world.WorldSource;
@@ -13,9 +13,9 @@ import net.minecraft.core.world.chunk.ChunkCoordinate;
 import net.minecraft.core.world.season.SeasonManager;
 import net.minecraft.core.world.season.SeasonWinter;
 import net.minecraft.core.world.type.WorldType;
-import net.minecraft.core.world.type.WorldTypeNether;
-import net.minecraft.core.world.type.WorldTypeOverworld;
-import net.minecraft.core.world.type.WorldTypeOverworldHell;
+import net.minecraft.core.world.type.nether.WorldTypeNether;
+import net.minecraft.core.world.type.overworld.WorldTypeOverworld;
+import net.minecraft.core.world.type.overworld.WorldTypeOverworldHell;
 import net.minecraft.core.world.weather.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -51,7 +51,7 @@ public abstract class WorldMixin implements WorldSource {
 	public abstract Biome getBlockBiome(int x, int y, int z);
 
 	@Shadow
-	public abstract EntityPlayer getClosestPlayer(double x, double y, double z, double radius);
+	public abstract Player getClosestPlayer(double x, double y, double z, double radius);
 
 	@Shadow
 	public abstract void playSoundEffect(Entity player, SoundCategory category, double x, double y, double z, String soundPath, float volume, float pitch);
@@ -72,17 +72,14 @@ public abstract class WorldMixin implements WorldSource {
 	public abstract boolean isDaytime();
 
 	@Shadow
-	@Final
 	public WorldType worldType;
+
 	@Shadow
-	@Final
-	private int heightBlocks;
+	public BiomeProvider biomeProvider;
+
 	@Shadow
-	@Final
-	private BiomeProvider biomeProvider;
-	@Shadow
-	@Final
 	public SeasonManager seasonManager;
+
 	@Unique
 	private int atmosia_ambientSoundCounter;
 
@@ -114,7 +111,7 @@ public abstract class WorldMixin implements WorldSource {
 					String s = "";
 
 					if (id == 0) {
-						EntityPlayer closestPlayer = getClosestPlayer((double) blockX + (double) 0.5F, (double) blockY + (double) 0.5F, (double) blockZ + (double) 0.5F, 8);
+						Player closestPlayer = getClosestPlayer((double) blockX + (double) 0.5F, (double) blockY + (double) 0.5F, (double) blockZ + (double) 0.5F, 8);
 						if (closestPlayer != null && closestPlayer.distanceToSqr((double) blockX + (double) 0.5F, (double) blockY + (double) 0.5F, (double) blockZ + (double) 0.5F) > (double) 4) {
 							if (worldType instanceof WorldTypeOverworld) {
 								// Forests
@@ -123,28 +120,10 @@ public abstract class WorldMixin implements WorldSource {
 									getBiomeProvider().getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_BOREAL_FOREST ||
 									getBiomeProvider().getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_SEASONAL_FOREST) {
 									if (canBlockSeeTheSky(blockX, blockY, blockZ)) {
-										if (blockY < heightBlocks / 2) {
+										if (blockY < getHeightBlocks() / 2) {
 											if (getCurrentWeather() instanceof WeatherClear) {
 												if (!(seasonManager.getCurrentSeason() instanceof SeasonWinter)) {
-													if (isDaytime()) {
-														switch (rand.nextInt(4)) {
-															case 3:
-																s = "atmosia.flit";
-																break;
-															case 2:
-																s = "atmosia.chicka";
-																break;
-															case 1:
-																s = "atmosia.chirp";
-																break;
-															case 0:
-															default:
-																s = "atmosia.squeek";
-																break;
-														}
-													} else {
-														s = "atmosia.critter";
-													}
+													s = isDaytime() ? "atmosia:ambience.forest" : "atmosia:ambience.night";
 												}
 											}
 										}
@@ -153,7 +132,7 @@ public abstract class WorldMixin implements WorldSource {
 
 								// Snow and Rain
 								if (getCurrentWeather() instanceof WeatherRain || getCurrentWeather() instanceof WeatherSnow) {
-									s = "atmosia.treewind";
+									s = "atmosia:ambience.forest.weather";
 								}
 
 								// Grasslands & Cold Flat
@@ -164,41 +143,30 @@ public abstract class WorldMixin implements WorldSource {
 									biomeProvider.getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_TUNDRA ||
 									biomeProvider.getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_GLACIER) &&
 									blockY < getHeightBlocks() / 2) {
-									s = "atmosia.wind_snippet";
+									s = "atmosia:ambience.plains";
 								}
 
 								// Swamps
 								if (getBiomeProvider().getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_SWAMPLAND ||
 									getBiomeProvider().getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_SWAMPLAND_MUDDY) {
-									s = "atmosia.critter";
+									s = "atmosia:ambience.swamp";
 								}
 
 								// Stormy
 								if (canBlockSeeTheSky(blockX, blockY, blockZ) && blockY < getHeightBlocks() / 2 && getCurrentWeather() instanceof WeatherStorm) {
-									s = "atmosia.wind_hit";
+									s = "atmosia:ambience.weather.storm";
 								}
 
 								// Too High
 								if (canBlockSeeTheSky(blockX, blockY, blockZ) && blockY >= getHeightBlocks() / 2) {
-									s = "atmosia.windgust";
+									s = "atmosia:ambience.height";
 								}
 
 								if (!canBlockSeeTheSky(blockX, blockY, blockZ) && blockY < getHeightBlocks() * 0.21) {
-									switch (rand.nextInt(3)) {
-										case 2:
-											s = "atmosia.cave_hit";
-											break;
-										case 1:
-											s = "atmosia.rain_drip";
-											break;
-										case 0:
-										default:
-											s = "atmosia.rumble";
-											break;
-									}
+									s = "atmosia:ambience.cave";
 								}
 							} else if (worldType instanceof WorldTypeNether || worldType instanceof WorldTypeOverworldHell) {
-								s = "atmosia.wind_moan";
+								s = "atmosia:ambience.nether";
 							}
 
 							playSoundEffect(null,
