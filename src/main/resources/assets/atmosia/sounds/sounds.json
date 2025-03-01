@@ -1,4 +1,52 @@
 {
+  "ambient.beach": {
+    "sounds": [
+      {
+        "name": "ambience/beach/seagulls_ambient1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/beach/seagulls_ambient2.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/beach/seagulls_ambient3.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/beach/seagulls_ambient4.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/beach/seagulls_ambient5.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/beach/wave1.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/beach/wave2.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/beach/wave3.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/beach/wave4.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/beach/wave5.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/beach/wave6.ogg",
+        "stream": true
+      }
+    ]
+  },
   "ambience.cave": {
     "sounds": [
       {
@@ -231,6 +279,26 @@
       },
       {
         "name": "ambience/swamp/critter8.ogg",
+        "stream": true
+      },
+      {
+        "name": "ambience/swamp/flies1.wav",
+        "stream": true
+      },
+      {
+        "name": "ambience/swamp/flies2.wav",
+        "stream": true
+      },
+      {
+        "name": "ambience/swamp/flies3.wav",
+        "stream": true
+      },
+      {
+        "name": "ambience/swamp/flies4.wav",
+        "stream": true
+      },
+      {
+        "name": "ambience/swamp/flies5.wav",
         "stream": true
       }
     ]

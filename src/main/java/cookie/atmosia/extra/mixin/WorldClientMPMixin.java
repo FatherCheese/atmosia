@@ -1,5 +1,6 @@
 package cookie.atmosia.extra.mixin;
 
+import cookie.atmosia.Atmosia;
 import cookie.atmosia.extra.IWorldAtmospheric;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -9,7 +10,7 @@ import net.minecraft.client.world.WorldClientMP;
 import net.minecraft.core.entity.player.Player;
 import net.minecraft.core.sound.SoundCategory;
 import net.minecraft.core.util.helper.MathHelper;
-import net.minecraft.core.world.biome.Biomes;
+import net.minecraft.core.world.biome.Biome;
 import net.minecraft.core.world.chunk.Chunk;
 import net.minecraft.core.world.chunk.ChunkCoordinate;
 import net.minecraft.core.world.season.SeasonWinter;
@@ -17,10 +18,7 @@ import net.minecraft.core.world.type.WorldTypes;
 import net.minecraft.core.world.type.nether.WorldTypeNether;
 import net.minecraft.core.world.type.overworld.WorldTypeOverworld;
 import net.minecraft.core.world.type.overworld.WorldTypeOverworldHell;
-import net.minecraft.core.world.weather.WeatherClear;
-import net.minecraft.core.world.weather.WeatherRain;
-import net.minecraft.core.world.weather.WeatherSnow;
-import net.minecraft.core.world.weather.WeatherStorm;
+import net.minecraft.core.world.weather.*;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -52,7 +50,7 @@ public abstract class WorldClientMPMixin extends WorldClient implements IWorldAt
 		for (Player player : players) {
 			int playerChunkX = MathHelper.floor(player.x / (double) 16.0F);
 			int playerChunkZ = MathHelper.floor(player.z / (double) 16.0F);
-			byte radius = 9;
+			byte radius = 7;
 
 			for (int x = -radius; x <= radius; ++x) {
 				for (int z = -radius; z <= radius; ++z) {
@@ -82,61 +80,64 @@ public abstract class WorldClientMPMixin extends WorldClient implements IWorldAt
 					String s = "";
 					int halfHeightBlocks = worldType == WorldTypes.OVERWORLD_EXTENDED ? (int) (getHeightBlocks() * 0.7) : getHeightBlocks() / 2;
 
+					boolean validSkylight = canBlockSeeTheSky(blockX, blockY, blockZ);
+					boolean validBlockHeight = blockY < halfHeightBlocks;
+					boolean validClearWeather = weatherManager.getCurrentWeather() instanceof WeatherClear;
+					boolean validSeason = !(seasonManager.getCurrentSeason() instanceof SeasonWinter);
+					int range = 150;
+
 					if (id == 0) {
 						Player closestPlayer = getClosestPlayer((double) blockX + (double) 0.5F, (double) blockY + (double) 0.5F, (double) blockZ + (double) 0.5F, 8);
 						if (closestPlayer != null && closestPlayer.distanceToSqr((double) blockX + (double) 0.5F, (double) blockY + (double) 0.5F, (double) blockZ + (double) 0.5F) > (double) 4) {
+							// Overworld
 							if (worldType instanceof WorldTypeOverworld) {
+
 								// Forests
-								if (getBiomeProvider().getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_FOREST ||
-									getBiomeProvider().getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_BIRCH_FOREST ||
-									getBiomeProvider().getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_BOREAL_FOREST ||
-									getBiomeProvider().getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_SEASONAL_FOREST) {
-									if (canBlockSeeTheSky(blockX, blockY, blockZ)) {
-										if (blockY < halfHeightBlocks) {
-											if (getCurrentWeather() instanceof WeatherClear) {
-												if (!(seasonManager.getCurrentSeason() instanceof SeasonWinter)) {
-													s = isDaytime() ? "atmosia:ambience.forest" : "atmosia:ambience.night";
-												}
-											}
+								for (Biome forest : Atmosia.forestBiomes) {
+									if (biomeProvider.getBiome(blockX, blockY, blockZ) == forest) {
+										if (validSkylight && validBlockHeight && validClearWeather && validSeason) {
+											s = isDaytime() ? "atmosia:ambience.forest" : "atmosia:ambience.night";
+											range = 90;
+										}
+
+										// Snow and Rain
+										if (getCurrentWeather() instanceof WeatherRain ||
+											getCurrentWeather() instanceof WeatherSnow) {
+											s = "atmosia:ambience.forest.weather";
 										}
 									}
 								}
 
-								// Snow and Rain
-								if (getCurrentWeather() instanceof WeatherRain || getCurrentWeather() instanceof WeatherSnow) {
-									s = "atmosia:ambience.forest.weather";
-								}
-
-								// Grasslands & Cold Flat
-								if ((biomeProvider.getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_GRASSLANDS ||
-									biomeProvider.getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_SHRUBLAND ||
-									biomeProvider.getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_MEADOW ||
-									biomeProvider.getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_PLAINS ||
-									biomeProvider.getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_TUNDRA ||
-									biomeProvider.getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_GLACIER) &&
-									blockY < halfHeightBlocks) {
-									s = "atmosia:ambience.plains";
+								// Plains
+								for (Biome plains : Atmosia.plainsBiomes) {
+									if (biomeProvider.getBiome(blockX, blockY, blockZ) == plains) {
+										if (validBlockHeight && validClearWeather && validSkylight) {
+											s = "atmosia:ambience.plains";
+										}
+									}
 								}
 
 								// Swamps
-								if (getBiomeProvider().getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_SWAMPLAND ||
-									getBiomeProvider().getBiome(blockX, blockY, blockZ) == Biomes.OVERWORLD_SWAMPLAND_MUDDY) {
-									if (canBlockSeeTheSky(blockX, blockY, blockZ) && blockY < halfHeightBlocks) {
-										s = "atmosia:ambience.swamp";
+								for (Biome swamp : Atmosia.swampBiomes) {
+									if (getBiomeProvider().getBiome(blockX, blockY, blockZ) == swamp) {
+										if (validBlockHeight && validSkylight) {
+											s = "atmosia:ambience.swamp";
+											range = 90;
+										}
 									}
 								}
 
 								// Stormy
-								if (canBlockSeeTheSky(blockX, blockY, blockZ) && blockY < halfHeightBlocks && getCurrentWeather() instanceof WeatherStorm) {
+								if (validBlockHeight && validSkylight && getCurrentWeather() instanceof WeatherStorm) {
 									s = "atmosia:ambience.weather.storm";
 								}
 
 								// Too High
-								if (canBlockSeeTheSky(blockX, blockY, blockZ) && blockY >= halfHeightBlocks) {
+								if (validSkylight && !validBlockHeight) {
 									s = "atmosia:ambience.height";
 								}
 
-								if (!canBlockSeeTheSky(blockX, blockY, blockZ) && blockY < halfHeightBlocks * 0.7) {
+								if (!validSkylight && blockY < halfHeightBlocks * 0.4) {
 									s = "atmosia:ambience.cave";
 								}
 							} else if (worldType instanceof WorldTypeNether || worldType instanceof WorldTypeOverworldHell) {
@@ -152,7 +153,7 @@ public abstract class WorldClientMPMixin extends WorldClient implements IWorldAt
 								0.7F,
 								0.8F + rand.nextFloat() * 0.2F);
 
-							atmosia_ambientSoundCounter = rand.nextInt(150);
+							atmosia_ambientSoundCounter = rand.nextInt(range);
 						}
 					}
 				}
