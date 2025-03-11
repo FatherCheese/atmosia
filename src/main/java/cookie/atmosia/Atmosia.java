@@ -1,5 +1,6 @@
 package cookie.atmosia;
 
+import cookie.atmosia.client.SoundSettings;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.sound.SoundRepository;
 import net.minecraft.core.world.biome.Biome;
@@ -56,5 +57,6 @@ public class Atmosia implements ModInitializer, ClientStartEntrypoint {
 	@Override
 	public void afterClientStart() {
 		SoundRepository.registerNamespace(MOD_ID);
+		new SoundSettings();
 	}
 }

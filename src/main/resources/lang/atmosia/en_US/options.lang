@@ -1,0 +1,10 @@
+gui.options.page.audio.ambience=Ambience
+options.beachAmbience=Beach Ambience
+options.caveAmbience=Cave Ambience
+options.forestAmbience=Forest Ambience
+options.heightAmbience=Height Ambience
+options.hellAmbience=Hell Ambience
+options.nightAmbience=Night Ambience
+options.plainsAmbience=Plains Ambience
+options.swampAmbience=Swamp Ambience
+options.weatherAmbience=Weather Ambience

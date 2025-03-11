@@ -1,6 +1,7 @@
 package cookie.atmosia.extra.mixin;
 
 import cookie.atmosia.Atmosia;
+import cookie.atmosia.client.SoundSettings;
 import cookie.atmosia.extra.IWorldAtmospheric;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.entity.player.Player;
@@ -20,6 +21,8 @@ import net.minecraft.core.world.type.nether.WorldTypeNether;
 import net.minecraft.core.world.type.overworld.WorldTypeOverworld;
 import net.minecraft.core.world.type.overworld.WorldTypeOverworldHell;
 import net.minecraft.core.world.weather.*;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -84,6 +87,10 @@ public abstract class WorldMixin implements WorldSource, IWorldAtmospheric {
 	public List<Player> players;
 	@Shadow
 	public WeatherManager weatherManager;
+
+	@Shadow
+	public abstract void playSoundAtEntity(@Nullable Entity player, @NotNull Entity entity, String soundPath, float volume, float pitch);
+
 	@Unique
 	private int atmosia_ambientSoundCounter;
 
@@ -130,6 +137,7 @@ public abstract class WorldMixin implements WorldSource, IWorldAtmospheric {
 					blockX += chunkBlockX;
 					blockZ += chunkBlockZ;
 					String s = "";
+					float vol = 1;
 					int halfHeightBlocks = worldType == WorldTypes.OVERWORLD_EXTENDED ? (int) (getHeightBlocks() * 0.7) : getHeightBlocks() / 2;
 
 					boolean validSkylight = canBlockSeeTheSky(blockX, blockY, blockZ);
@@ -149,6 +157,7 @@ public abstract class WorldMixin implements WorldSource, IWorldAtmospheric {
 									if (biomeProvider.getBiome(blockX, blockY, blockZ) == forest) {
 										if (validSkylight && validBlockHeight && validClearWeather && validSeason) {
 											s = isDaytime() ? "atmosia:ambience.forest" : "atmosia:ambience.night";
+											vol = isDaytime() ? SoundSettings.forestAmbienceVolume.value : SoundSettings.nightAmbienceVolume.value;
 											range = 90;
 										}
 
@@ -156,6 +165,7 @@ public abstract class WorldMixin implements WorldSource, IWorldAtmospheric {
 										if (getCurrentWeather() instanceof WeatherRain ||
 											getCurrentWeather() instanceof WeatherSnow) {
 											s = "atmosia:ambience.forest.weather";
+											vol = SoundSettings.weatherAmbienceVolume.value;
 										}
 									}
 								}
@@ -165,6 +175,7 @@ public abstract class WorldMixin implements WorldSource, IWorldAtmospheric {
 									if (biomeProvider.getBiome(blockX, blockY, blockZ) == plains) {
 										if (validBlockHeight && validClearWeather && validSkylight) {
 											s = "atmosia:ambience.plains";
+											vol = SoundSettings.plainsAmbienceVolume.value;
 										}
 									}
 								}
@@ -174,6 +185,7 @@ public abstract class WorldMixin implements WorldSource, IWorldAtmospheric {
 									if (getBiomeProvider().getBiome(blockX, blockY, blockZ) == swamp) {
 										if (validBlockHeight && validSkylight) {
 											s = "atmosia:ambience.swamp";
+											vol = SoundSettings.swampAmbienceVolume.value;
 											range = 90;
 										}
 									}
@@ -182,28 +194,25 @@ public abstract class WorldMixin implements WorldSource, IWorldAtmospheric {
 								// Stormy
 								if (validBlockHeight && validSkylight && getCurrentWeather() instanceof WeatherStorm) {
 									s = "atmosia:ambience.weather.storm";
+									vol = SoundSettings.weatherAmbienceVolume.value;
 								}
 
 								// Too High
 								if (validSkylight && !validBlockHeight) {
 									s = "atmosia:ambience.height";
+									vol = SoundSettings.heightAmbienceVolume.value;
 								}
 
 								if (!validSkylight && blockY < halfHeightBlocks * 0.4) {
 									s = "atmosia:ambience.cave";
+									vol = SoundSettings.caveAmbienceVolume.value;
 								}
 							} else if (worldType instanceof WorldTypeNether || worldType instanceof WorldTypeOverworldHell) {
 								s = "atmosia:ambience.nether";
+								vol = SoundSettings.hellAmbienceVolume.value;
 							}
 
-							playSoundEffect(null,
-								SoundCategory.CAVE_SOUNDS,
-								(double) blockX + (double) 0.5F,
-								(double) blockY + (double) 0.5F,
-								(double) blockZ + (double) 0.5F,
-								s,
-								0.7F,
-								0.8F + rand.nextFloat() * 0.2F);
+							playSoundAtEntity(closestPlayer, closestPlayer, s, vol, 0.8F + rand.nextFloat() * 0.2F);
 
 							atmosia_ambientSoundCounter = rand.nextInt(range);
 						}
