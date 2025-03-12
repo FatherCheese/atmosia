@@ -57,9 +57,6 @@ public abstract class WorldMixin implements WorldSource, IWorldAtmospheric {
 	public abstract Player getClosestPlayer(double x, double y, double z, double radius);
 
 	@Shadow
-	public abstract void playSoundEffect(Entity player, SoundCategory category, double x, double y, double z, String soundPath, float volume, float pitch);
-
-	@Shadow
 	public abstract Weather getCurrentWeather();
 
 	@Shadow
